@@ -211,7 +211,9 @@ class Gen
   {
     let vertices = [];//this.start.points.concat(this.end.points);
     let indices = [];
+    let uvs = [];
     const length = this.start.points.length;
+    console.log("rendering, segments", this.segments.length);
     for(let y = 0; y < this.segments.length; y++)
     {
       let contour = this.segments[y];
@@ -223,14 +225,28 @@ class Gen
         const around = (i + 1) % length;
         indices.push(base + i);
         indices.push(base + length + i);
+        indices.push(base + length + around);
+
+        indices.push(base + around);
+        indices.push(base + i);
+        indices.push(base + length + around);
+        /*
+        indices.push(base + i);
+        indices.push(base + length + i);
         indices.push(base + around);
         indices.push(base + around);
         indices.push(base + length + i);
         indices.push(base + length + around);
+        */
+
+        console.log("step i ", i);
       }
+      console.log("step y ", y);
+      uvs = uvs.concat([0, 0, 1, 0, 0, 0, 1, 0]);
+      uvs = uvs.concat([0, 1, 1, 1, 0, 1, 1, 1]);
     }
     //console.log("wo", vertices[0], this.relativeOrigin, vertices[0].subtract(this.relativeOrigin));
-    return { vertices, indices };
+    return { vertices, indices, uvs };
   }
 
   get()
@@ -266,9 +282,26 @@ class Gen
     this.mesh = new BABYLON.Mesh("custom", scene);
     this.mesh.sideOrientation = BABYLON.Mesh.DOUBLESIDE;
     const meshData = this.render();
-    const vertexData = this.createMeshVertexData(meshData);
+    const vertexData = this.createMeshVertexData(meshData, this.spec.texture);
     vertexData.applyToMesh(this.mesh);
     this.mesh.translate(this.relativeOrigin.add(origin), 1, BABYLON.Space.WORLD);
+
+    if(this.spec.texture)
+    {
+      var material = new BABYLON.ShaderMaterial("mandelbrot", scene, "./mandelbrot",
+          {
+              attributes: ["position", "normal", "uv"],
+              uniforms: ["world", "worldView", "worldViewProjection", "view", "projection"]
+          }
+      );
+
+
+      //var material = new BABYLON.StandardMaterial("customMaterial", scene);
+
+      //material.diffuseTexture = new BABYLON.Texture(this.spec.texture, scene);
+
+      this.mesh.material = material;
+    }
 
     const mass = physics ? (this.spec.mass || 0) : 0;
     const outString = `
@@ -327,11 +360,17 @@ class Gen
     return meshes;
   }
 
-  createMeshVertexData(meshData)
+  createMeshVertexData(meshData, texture)
   {
     var vertexData = new BABYLON.VertexData();
     vertexData.positions = [].concat.apply([], meshData.vertices.map(vertex => [vertex.x, vertex.y, vertex.z]));
     vertexData.indices = meshData.indices;    
+    if(texture)
+    {
+    console.log("uvs", meshData);
+       vertexData.uvs = meshData.uvs;
+    }
+
     let normals = [];
     BABYLON.VertexData.ComputeNormals(vertexData.positions, vertexData.indices, normals);
     vertexData.normals = normals;
@@ -510,6 +549,7 @@ var room = {
   steps: 1,
   mass: 0,
   distance: 6,
+  texture: "brickwork.jpg",
   gen: [
     {
       tag: "chain1",
@@ -538,10 +578,18 @@ var room = {
             {
                 tag: "flag",
                 contour: {type: "PARENT_SIDE", n: 0, segment: 0},
+                texture: "brickwork.jpg",
                 distance: 6,
                 steps: 1,
                 mass: 10,
                 joint: true,
+              /*
+                gen: [{
+                  type: "self",
+                  up: 3,
+                  depth: 20
+                }]
+                */
             }
           ]
         }
@@ -561,7 +609,7 @@ var ground = new Gen(ground);
 ground.generate();
 ground.getDisjoint();
 
-var realm = new Gen(flake)
+var realm = new Gen(room)
 realm.generate();
 realm.getDisjoint();
  console.log(realm);
