@@ -1,13 +1,13 @@
-//uniform vec2 center;
-//uniform float scale;
+uniform vec2 center;
+uniform float scale;
 
 varying vec2 vUV;
 
 void main() {
     vec2 z, c;
     int iter = 100;
-    float scale = 1.0/1.0;
-    vec2 center = vec2(0.5, 0.5);
+    //float scale = 1.0/1.0;
+    //vec2 center = vec2(0.5, 0.5);
 
     c.x = 1.3333 * (vUV.x - 0.5) * scale - center.x;
     c.y = (vUV.y - 0.5) * scale - center.y;

@@ -141,7 +141,7 @@ var construct = {
   ]
 };
 
-var room = {
+var chain = {
   tag: "chain0",
   contour: new Contour(),
   steps: 2,
@@ -194,6 +194,15 @@ var room = {
       ]
     }
   ]
+}
+
+var plane = {
+  contour: new Contour(PLANE, new Vector3(0, 0, 1)),
+  texture: "brickwork.jpg",
+  distance: 20,
+  steps: 1,
+  mass: 0,
+  tag: "plane"
 }
 
 var ground = {

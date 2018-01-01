@@ -18,17 +18,20 @@ const RECT = [
 ];
 
 const GROUND = [
-  new Vector3(-100,-501, -100),
-  new Vector3(-100,-500, -100),
-  new Vector3(-100, -500,100),
-  new Vector3(-100, -501,100)
+  new Vector3(-100,-51, -100),
+  new Vector3(-100,-50, -100),
+  new Vector3(-100, -50,100),
+  new Vector3(-100, -51,100)
 ]
+
+const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
 
 class Contour
 {
   constructor(points=RECT, norm) //0, 0, 1=new Vector3(0, 0, 1)
   {
     this.points = points;
+    console.log("constructing contour", points, norm);
     if(!norm)
       this.norm = this.calculateNorm(points);
     else
@@ -193,9 +196,19 @@ class Gen
         indices.push(base + length + i);
         indices.push(base + length + around);
       }
-      uvs = uvs.concat([0, 0, 1, 0, 0, 0, 1, 0]);
-      uvs = uvs.concat([0, 1, 1, 1, 0, 1, 1, 1]);
+      //uvs = Array.from({length:5}, (e, i)=>i) // [0, 1, 2, 3, 4]
+      if(length >= 3)
+      {
+        uvs = uvs.concat([0, 0, 1, 0, 0, 0, 1, 0]);
+        uvs = uvs.concat([0, 1, 1, 1, 0, 1, 1, 1]);
+      }
+      else
+      {
+        uvs = uvs.concat([0, 0, 1, 0]);
+        uvs = uvs.concat([0, 1, 1, 1]);
+      }
     }
+    console.log("mesh generated" , { vertices, indices, uvs });
     return { vertices, indices, uvs };
   }
 
@@ -233,7 +246,7 @@ class Gen
       var material = new BABYLON.ShaderMaterial("mandelbrot", scene, "./mandelbrot",
           {
               attributes: ["position", "normal", "uv"],
-              uniforms: ["world", "worldView", "worldViewProjection", "view", "projection"]
+              uniforms: ["world", "center", "scale", "worldView", "worldViewProjection", "view", "projection"]
           }
       );
       this.mesh.material = material;

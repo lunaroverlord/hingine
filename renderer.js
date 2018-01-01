@@ -62,9 +62,9 @@ var physicsPlugin = new BABYLON.OimoJSPlugin(100);
 //var physicsPlugin = new BABYLON.CannonJSPlugin();
 scene.enablePhysics(gravityVector, physicsPlugin);
 
-
 engine.runRenderLoop(function () {
-    scene.render();
+  scene.render();
+
 });
 
 window.addEventListener("resize", function () {
