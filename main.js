@@ -1,4 +1,35 @@
 
+/*
+TrigIter = 5
+TrigLimit = 1.1
+Center = -0.0213501,-0.0041966
+Zoom = 4.062113
+Gamma = 2.843137
+ToneMapping = 3
+Exposure = 1.3044
+Brightness = 1
+Contrast = 1.0396
+Saturation = 1.8817
+AARange = 1
+AAExp = 1
+GaussianAA = false
+Iterations = 69
+PreIterations = 52
+R = 0.5677083
+G = 0.3036649
+B = 0.6458333
+C = 1.135417
+Julia = true
+JuliaX = 1.43649
+JuliaY = 2.05404
+ShowMap = false
+MapZoom = 2.006667
+EscapeSize = 5
+ColoringType = 0
+ColorFactor = 0.5
+MinRadius = 0
+Scaling = -2.350993
+*/
 
 var ground = new Gen(ground);
 ground.generate();

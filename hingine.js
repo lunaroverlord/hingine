@@ -26,6 +26,29 @@ const GROUND = [
 
 const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
 
+class Shader
+{
+  constructor(name="mandelbrot")
+  {
+
+    this.uniforms = {
+      //world
+      //worldView
+      //worldViewProjection
+      //view
+      //projection
+      center: new BABYLON.Vector2(0.2, 0.1),
+      scale: 1.0,
+    }
+    this.material = new BABYLON.ShaderMaterial(name, scene, "./" + name,
+          {
+              attributes: ["position", "normal", "uv"],
+              uniforms: Object.keys(this.uniforms)
+          }
+      );
+  }
+}
+
 class Contour
 {
   constructor(points=RECT, norm) //0, 0, 1=new Vector3(0, 0, 1)
@@ -243,13 +266,7 @@ class Gen
 
     if(this.spec.texture)
     {
-      var material = new BABYLON.ShaderMaterial("mandelbrot", scene, "./mandelbrot",
-          {
-              attributes: ["position", "normal", "uv"],
-              uniforms: ["world", "center", "scale", "worldView", "worldViewProjection", "view", "projection"]
-          }
-      );
-      this.mesh.material = material;
+      this.mesh.material = new Shader("mandelbrot").material;
     }
 
     const mass = physics ? (this.spec.mass || 0) : 0;
