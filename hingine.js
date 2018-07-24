@@ -26,26 +26,52 @@ const GROUND = [
 
 const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
 
+function isFloat(n){
+  console.log("testing", n);
+    return n.toString().includes('.');
+}
+
+function Int(value)
+{
+  this.type = "int";
+  this.value = value;
+  return this;
+}
+
 class Shader
 {
-  constructor(name="mandelbrot")
+  constructor(name = "mandelbrot", uniforms = {})
   {
 
-    this.uniforms = {
-      //world
-      //worldView
-      //worldViewProjection
-      //view
-      //projection
-      center: new BABYLON.Vector2(0.2, 0.1),
-      scale: 1.0,
-    }
+    this.uniforms = uniforms;
     this.material = new BABYLON.ShaderMaterial(name, scene, "./" + name,
           {
               attributes: ["position", "normal", "uv"],
-              uniforms: Object.keys(this.uniforms)
+              uniforms: Object.keys(this.uniforms).concat(["worldViewProjection", "projection"])
           }
       );
+
+    for(const key in this.uniforms) {
+      switch(typeof this.uniforms[key])
+      {
+        case "number":
+          console.log("setting num", key);
+          this.material.setFloat(key, this.uniforms[key]);
+        break;
+        case "object":
+          if(this.uniforms[key].type === "int")
+          {
+            console.log("material", this.material);
+            this.material.setFloat(this.uniforms[key].value);
+          }
+          else if(this.uniforms[key].length == 2)
+          {
+            console.log("setting vec2", key);
+            this.material.setVector2(key, new BABYLON.Vector2(this.uniforms[key][0], this.uniforms[key][1]));
+          }
+        break;
+      }
+    }
   }
 }
 
@@ -266,7 +292,43 @@ class Gen
 
     if(this.spec.texture)
     {
-      this.mesh.material = new Shader("mandelbrot").material;
+      //const uniforms = { center: new BABYLON.Vector2(0.2, 0.1), scale: 1.0, };
+      const uniforms = { center: [0.2, 0.1], scale: 1.0, };
+
+      const uniforms2 = {
+        TrigIter : Int(5),
+        TrigLimit : 1.1,
+        Center : [-0.0213501,-0.0041966],
+        Zoom : 4.062113,
+        Gamma : 2.843137,
+        ToneMapping : Int(3),
+        Exposure : 1.3044,
+        Brightness : Int(1),
+        Contrast : 1.0396,
+        Saturation : 1.8817,
+        AARange : Int(1),
+        AAExp : Int(1),
+        GaussianAA : false,
+        Iterations : Int(69),
+        PreIterations : Int(52),
+        R : 0.5677083,
+        G : 0.3036649,
+        B : 0.6458333,
+        C : 1.135417,
+        Julia : true,
+        JuliaX : 1.43649,
+        JuliaY : 2.05404,
+        ShowMap : false,
+        MapZoom : 2.006667,
+        EscapeSize : Int(5),
+        ColoringType : Int(0),
+        ColorFactor : 0.5,
+        MinRadius : Int(0),
+        Scaling : -2.350993,
+      }
+
+      //this.mesh.material = new Shader("mandelbrot", uniforms).material;
+      this.mesh.material = new Shader("mandelbrot", uniforms).material;
     }
 
     const mass = physics ? (this.spec.mass || 0) : 0;

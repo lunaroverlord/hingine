@@ -39,8 +39,6 @@ var plane = new Gen(plane);
 plane.generate();
 plane.getDisjoint();
 
-plane.mesh.material.setFloat("scale", 1.0/20.0);
-
 let keyState = {};
 
 window.addEventListener('keydown', function(event) {
@@ -74,3 +72,38 @@ setInterval(() => {
    plane.mesh.material.setFloat("scale", scale);
    plane.mesh.material.setVector2("center", center);
 }, 50);
+
+console.log("enabling web midi");
+WebMidi.enable(function (err) {
+
+  if (err) {
+    console.log("WebMidi could not be enabled.", err);
+  } else {
+    console.log("WebMidi enabled!");
+    console.log(WebMidi.inputs);
+    console.log(WebMidi.outputs);
+    var input = WebMidi.inputs[1];
+
+    // Listen for a 'note on' message on all channels
+    input.addListener('noteon', "all",
+      function (e) {
+        console.log("Received 'noteon' message (" + e.note.name + e.note.octave + ").");
+      }
+    );
+
+    // Listen to pitch bend message on channel 3
+    input.addListener('pitchbend', 3,
+      function (e) {
+        console.log("Received 'pitchbend' message.", e);
+      }
+    );
+
+  // Listen to control change message on all channels
+  input.addListener('controlchange', "all",
+    function (e) {
+      console.log("Received 'controlchange' message.", e);
+    }
+  );
+  }
+  
+}, false);
