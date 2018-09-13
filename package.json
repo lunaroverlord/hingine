@@ -1,0 +1,33 @@
+{
+  "name": "hingine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "webpack-dev-server --hot",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -d",
+    "babel": {
+      "presets": [
+        "@babel/env"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://lunaroverlord@bitbucket.org/lunaroverlord/hingine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/lunaroverlord/hingine#readme",
+  "dependencies": {
+    "@babel/core": "^7.0.1",
+    "babel-loader": "^8.0.2",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "@babel/preset-env": "^7.0.0",
+    "babylonjs": "^3.3.0-beta.3",
+    "webpack": "^4.18.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.8"
+  }
+}

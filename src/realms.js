@@ -1,5 +1,8 @@
 //when building, convert this object to the mesh representation, add contours etc
-var flake = {
+import { Vector3 } from "babylonjs";
+import { Contour, PLANE, GROUND } from "./hingine.js";
+
+export var flake = {
   contour: new Contour(),
   steps: 3,
   //transform:  progress => tween (for each of n contours...)
@@ -39,7 +42,7 @@ var flake = {
   }]
 };
 
-var architecture = {
+export var architecture = {
   contour: new Contour(),
   steps: 5,
   tag: "room base",
@@ -73,7 +76,7 @@ var architecture = {
   ]
 };
 
-var darknet = {
+export var darknet = {
   contour: new Contour(),
   steps: 5,
   tag: "room base",
@@ -111,7 +114,7 @@ var darknet = {
   ]
 };
 
-var construct = {
+export var construct = {
   contour: new Contour(),
   steps: 1,
   mass: 0,
@@ -141,7 +144,7 @@ var construct = {
   ]
 };
 
-var chain = {
+export var chain = {
   tag: "chain0",
   contour: new Contour(),
   steps: 2,
@@ -196,7 +199,7 @@ var chain = {
   ]
 }
 
-var plane = {
+export var plane = {
   contour: new Contour(PLANE, new Vector3(0, 0, 1)),
   texture: "brickwork.jpg",
   distance: 20,
@@ -205,7 +208,7 @@ var plane = {
   tag: "plane"
 }
 
-var ground = {
+export var ground = {
   contour: new Contour(GROUND),
   distance: -200,
   steps: 1,

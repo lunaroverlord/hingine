@@ -1,9 +1,12 @@
 // Get the DOM element to attach to
-const container =
-    document.querySelector('#container');
+import * as BABYLON from 'babylonjs';
 
-BABYLON.DebugLayer.InspectorURL = 'babylon.inspector.bundle.js';
+const container = document.querySelector('#container');
+
+BABYLON.DebugLayer.InspectorURL = 'https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js';
 BABYLON.Tools.getClassName = BABYLON.Tools.GetClassName;
+
+
 
 var engine = new BABYLON.Engine(container, true);
 
@@ -47,24 +50,23 @@ var createScene = function ()
     //var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
 
     // Leave this function
+    //scene.debugLayer.show();
     return scene;
 
 };  // End of createScene function
 
 
 
-scene = createScene();
+export const scene = createScene();
 
-//scene.debugLayer.show();
 
-var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
-var physicsPlugin = new BABYLON.OimoJSPlugin(100);
+//var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+//var physicsPlugin = new BABYLON.OimoJSPlugin(100);
 //var physicsPlugin = new BABYLON.CannonJSPlugin();
-scene.enablePhysics(gravityVector, physicsPlugin);
+//scene.enablePhysics(gravityVector, physicsPlugin);
 
 engine.runRenderLoop(function () {
   scene.render();
-
 });
 
 window.addEventListener("resize", function () {

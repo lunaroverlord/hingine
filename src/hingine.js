@@ -2,6 +2,10 @@
 //Realm3D
 //file:///home/olafs/code/realm3d/index.html
 
+console.log("Hingine.js");
+
+import * as BABYLON from 'babylonjs';
+
 const physics = true;
 
 const Vector3 = BABYLON.Vector3;
@@ -10,21 +14,21 @@ const flatten = list => list.reduce(
     (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
 );
 
-const RECT = [
+export const RECT = [
   new Vector3(0, 0, 0),
   new Vector3(0, 1, 0),
   new Vector3(1, 1, 0),
   new Vector3(1, 0, 0)
 ];
 
-const GROUND = [
+export const GROUND = [
   new Vector3(-100,-51, -100),
   new Vector3(-100,-50, -100),
   new Vector3(-100, -50,100),
   new Vector3(-100, -51,100)
 ]
 
-const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
+export const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
 
 function isFloat(n){
   console.log("testing", n);
@@ -38,13 +42,17 @@ function Int(value)
   return this;
 }
 
-class Shader
+export class Shader
 {
   constructor(name = "mandelbrot", uniforms = {})
   {
-
+    /*
+    console.log("creating rtt with ", Gen.scene);
+    this.rtt = BABYLON.RenderTargetTexture("rtt", 200, Gen.scene);
+    console.log("____________ rtt", this.rtt);
+    */
     this.uniforms = uniforms;
-    this.material = new BABYLON.ShaderMaterial(name, scene, "./" + name,
+    this.material = new BABYLON.ShaderMaterial(name, Gen.scene, "./shaders/" + name,
           {
               attributes: ["position", "normal", "uv"],
               uniforms: Object.keys(this.uniforms).concat(["worldViewProjection", "projection"])
@@ -75,7 +83,7 @@ class Shader
   }
 }
 
-class Contour
+export class Contour
 {
   constructor(points=RECT, norm) //0, 0, 1=new Vector3(0, 0, 1)
   {
@@ -148,7 +156,7 @@ class Contour
   }
 }
 
-class Gen
+export class Gen
 {
   constructor(spec)
   {
@@ -283,7 +291,7 @@ class Gen
   getDisjoint(origin = new BABYLON.Vector3(0, 0, 0))
   {
     this.origin = origin;
-    this.mesh = new BABYLON.Mesh("custom", scene);
+    this.mesh = new BABYLON.Mesh("custom", Gen.scene);
     this.mesh.sideOrientation = BABYLON.Mesh.DOUBLESIDE;
     const meshData = this.render();
     const vertexData = this.createMeshVertexData(meshData, this.spec.texture);
@@ -295,6 +303,7 @@ class Gen
       //const uniforms = { center: new BABYLON.Vector2(0.2, 0.1), scale: 1.0, };
       const uniforms = { center: [0.2, 0.1], scale: 1.0, };
 
+      /*
       const uniforms2 = {
         TrigIter : Int(5),
         TrigLimit : 1.1,
@@ -326,6 +335,7 @@ class Gen
         MinRadius : Int(0),
         Scaling : -2.350993,
       }
+      */
 
       //this.mesh.material = new Shader("mandelbrot", uniforms).material;
       this.mesh.material = new Shader("mandelbrot", uniforms).material;
@@ -334,7 +344,7 @@ class Gen
     const mass = physics ? (this.spec.mass || 0) : 0;
 
     this.impostor = new BABYLON.PhysicsImpostor(this.mesh, BABYLON.PhysicsImpostor.MeshImpostor, 
-      { mass , restitution: 0.001, ignoreParent: true }, scene);
+      { mass , restitution: 0.001, ignoreParent: true }, Gen.scene);
 
     if(this.children)
     {
