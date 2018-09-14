@@ -1,6 +1,8 @@
 //when building, convert this object to the mesh representation, add contours etc
 import { Vector3 } from "babylonjs";
-import { Contour, PLANE, GROUND } from "./hingine.js";
+import { PLANE, GROUND } from "./shapes.js";
+import { Contour } from "./contour.js";
+import Hingine from "./hingine.js";
 
 export var flake = {
   contour: new Contour(),
@@ -202,6 +204,10 @@ export var chain = {
 export var plane = {
   contour: new Contour(PLANE, new Vector3(0, 0, 1)),
   texture: "brickwork.jpg",
+  shader: {
+    name: "mandelbrot",
+    uniforms: { center: [0.2, 0.1], scale: 1.0, }
+  },
   distance: 20,
   steps: 1,
   mass: 0,

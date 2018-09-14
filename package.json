@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "webpack-dev-server --hot",
+    "dev": "webpack-dev-server -d --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -d",
     "babel": {
@@ -22,10 +22,14 @@
   "homepage": "https://bitbucket.org/lunaroverlord/hingine#readme",
   "dependencies": {
     "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "@babel/preset-env": "^7.0.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babylonjs": "^3.3.0-beta.3",
+    "cannon": "^0.6.2",
+    "earcut": "^2.1.3",
+    "oimo": "^1.0.9",
     "webpack": "^4.18.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.8"

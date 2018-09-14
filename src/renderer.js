@@ -1,74 +1,79 @@
 // Get the DOM element to attach to
 import * as BABYLON from 'babylonjs';
 
-const container = document.querySelector('#container');
 
 BABYLON.DebugLayer.InspectorURL = 'https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js';
 BABYLON.Tools.getClassName = BABYLON.Tools.GetClassName;
 
-
-
-var engine = new BABYLON.Engine(container, true);
-
-  // This begins the creation of a function that we will 'call' just after it's built
-var createScene = function () 
+class Renderer
 {
-    // Now create a basic Babylon Scene object 
-    var scene = new BABYLON.Scene(engine);
+  constructor()
+  {
+    const container = document.querySelector('#container');
+    this.engine = new BABYLON.Engine(container, true);
+  }
 
-    // Change the scene background color to green.
-    scene.clearColor = new BABYLON.Color3(0.44, 0.44, 0.9);
+  createScene = () =>
+  {
+      // Now create a basic Babylon Scene object 
+      var scene = new BABYLON.Scene(this.engine);
 
-    // This creates and positions a free camera
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(-40, 50, -50), scene);
-    camera.minZ = 0;
+      // Change the scene background color to green.
+      scene.clearColor = new BABYLON.Color3(0.44, 0.44, 0.9);
 
-    // This targets the camera to scene origin
-    camera.setTarget(BABYLON.Vector3.Zero());
+      // This creates and positions a free camera
+      var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(-40, 50, -50), scene);
+      camera.minZ = 0;
 
-    // This attaches the camera to the canvas
-    camera.attachControl(container, false);
+      // This targets the camera to scene origin
+      camera.setTarget(BABYLON.Vector3.Zero());
 
-    camera.keysUp = [0x57]; //w
-    camera.keysDown = [0x53]; //s
-    camera.keysLeft = [0x41]; //a
-    camera.keysRight = [0x44]; //d
+      // This attaches the camera to the canvas
+      camera.attachControl(container, false);
 
-    // This creates a light, aiming 0,1,0 - to the sky.
-    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+      camera.keysUp = [0x57]; //w
+      camera.keysDown = [0x53]; //s
+      camera.keysLeft = [0x41]; //a
+      camera.keysRight = [0x44]; //d
 
-    // Dim the light a small amount
-    light.intensity = .5;
+      // This creates a light, aiming 0,1,0 - to the sky.
+      var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
 
-    // Let's try our built-in 'sphere' shape. Params: name, subdivisions, size, scene
-    //var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+      // Dim the light a small amount
+      light.intensity = .5;
 
-    // Move the sphere upward 1/2 its height
-    //sphere.position.y = 1;
-
-    // Let's try our built-in 'ground' shape.  Params: name, width, depth, subdivisions, scene
-    //var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
-
-    // Leave this function
-    //scene.debugLayer.show();
-    return scene;
-
-};  // End of createScene function
+      var rtt = new BABYLON.RenderTargetTexture('rtt', 1024, scene, true);
+      //rtt.renderList.push(sphere);
+      //rtt.activeCamera = cameraStudio;
+      scene.customRenderTargets.push(rtt);
 
 
+      //Physics
+      var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
+      var physicsPlugin = new BABYLON.OimoJSPlugin(100);
+      //var physicsPlugin = new BABYLON.CannonJSPlugin();
+      scene.enablePhysics(gravityVector, physicsPlugin);
+          
+      return scene;
 
-export const scene = createScene();
+  };  // End of createScene function
 
+  install = () => {
+    this.scene = this.createScene();
 
-//var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
-//var physicsPlugin = new BABYLON.OimoJSPlugin(100);
-//var physicsPlugin = new BABYLON.CannonJSPlugin();
-//scene.enablePhysics(gravityVector, physicsPlugin);
+    this.engine.runRenderLoop(() => {
+      this.scene.render();
+    });
 
-engine.runRenderLoop(function () {
-  scene.render();
-});
+    window.addEventListener("resize", () => {
+      this.engine.resize();
+    });
+  }
 
-window.addEventListener("resize", function () {
-    engine.resize();
-});
+  showDebug = () => {
+    this.scene.debugLayer.show();
+  }
+}
+
+export default Renderer;
+
