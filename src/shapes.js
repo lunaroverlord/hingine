@@ -15,4 +15,4 @@ export const GROUND = [
   new Vector3(-100, -51,100)
 ]
 
-export const PLANE = [new Vector3(-10, 0, 0), new Vector3(10, 0, 0)];
+export const PLANE = [new Vector3(-10, 0, -10), new Vector3(10, 0, -10)];

@@ -1,10 +1,12 @@
 import { Gen, realms } from "./runtime.js";
 
+/*
 var ground = new Gen(realms.ground);
 ground.generate();
 ground.getDisjoint();
+*/
 
-var plane = new Gen(realms.plane);
+var plane = new Gen(realms.architecture);
 plane.generate();
 plane.getDisjoint();
 

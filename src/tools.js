@@ -1,4 +1,3 @@
-
     const outString = `
         position ${this.mesh.position} ,
         rotationQuaternion ${this.mesh.rotationQuaternion},

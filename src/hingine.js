@@ -1,9 +1,6 @@
 //Redefine the way 3D worlds are created
 //Realm3D
 //file:///home/olafs/code/realm3d/index.html
-
-console.log("Hingine.js");
-
 import * as BABYLON from 'babylonjs';
 import { Contour } from "./contour.js";
 
@@ -19,7 +16,6 @@ export default function(scene) {
 
 
   function isFloat(n){
-    console.log("testing", n);
       return n.toString().includes('.');
   }
 
@@ -34,12 +30,6 @@ export default function(scene) {
   {
     constructor(name = "mandelbrot", uniforms = {})
     {
-      /*
-      console.log("creating rtt with ", Gen.scene);
-      this.rtt = BABYLON.RenderTargetTexture("rtt", 200, Gen.scene, true);
-      console.log("____________ rtt", this.rtt);
-      */
-
       this.uniforms = uniforms;
       this.material = new BABYLON.ShaderMaterial(name, scene, "./shaders/" + name,
             {
@@ -66,12 +56,14 @@ export default function(scene) {
               console.log("setting vec2", key);
               this.material.setVector2(key, new BABYLON.Vector2(this.uniforms[key][0], this.uniforms[key][1]));
             }
+            else if(this.uniforms[key].hasOwnProperty("isCube")) {
+              this.material.setTexture(key, this.uniforms[key]);
+            }
           break;
         }
       }
     }
   }
-
 
   class Gen
   {
@@ -255,6 +247,10 @@ export default function(scene) {
 
         //this.mesh.material = new Shader("mandelbrot", uniforms).material;
         this.mesh.material = new Shader(this.spec.shader.name, this.spec.shader.uniforms).material;
+      }
+      else if(this.spec.cycler)
+      {
+        this.mesh.material = this.spec.cycler.getMaterial();
       }
 
       const mass = physics ? (this.spec.mass || 0) : 0;

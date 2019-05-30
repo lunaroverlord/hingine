@@ -19,17 +19,24 @@ class Renderer
       var scene = new BABYLON.Scene(this.engine);
 
       // Change the scene background color to green.
-      scene.clearColor = new BABYLON.Color3(0.44, 0.44, 0.9);
+      scene.clearColor = new BABYLON.Color3(0.14, 0.04, 0.9);
 
       // This creates and positions a free camera
-      var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(-40, 50, -50), scene);
+      var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(40, 20, -30), scene);
+      /*
+      camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+      camera.orthoTop = 10;
+      camera.orthoBottom = -10;
+      camera.orthoLeft = -10;
+      camera.orthoRight = 10;
+      */
       camera.minZ = 0;
 
       // This targets the camera to scene origin
       camera.setTarget(BABYLON.Vector3.Zero());
 
       // This attaches the camera to the canvas
-      camera.attachControl(container, false);
+      camera.attachControl(container, true);
 
       camera.keysUp = [0x57]; //w
       camera.keysDown = [0x53]; //s
@@ -42,10 +49,12 @@ class Renderer
       // Dim the light a small amount
       light.intensity = .5;
 
+    /*
       var rtt = new BABYLON.RenderTargetTexture('rtt', 1024, scene, true);
       //rtt.renderList.push(sphere);
       //rtt.activeCamera = cameraStudio;
       scene.customRenderTargets.push(rtt);
+      */
 
 
       //Physics

@@ -6,7 +6,6 @@ export class Contour
   constructor(points=RECT, norm) //0, 0, 1=new Vector3(0, 0, 1)
   {
     this.points = points;
-    console.log("constructing contour", points, norm);
     if(!norm)
       this.norm = this.calculateNorm(points);
     else
