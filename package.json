@@ -21,7 +21,7 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/lunaroverlord/hingine#readme",
   "dependencies": {
-    "@babel/core": "^7.0.1",
+    "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.0.0",
     "babel-loader": "^8.0.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
